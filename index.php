@@ -1,15 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+define('WEBROOT', str_replace('index.php', '', $_SERVER['SCRIPT_NAME']));
+define('ROOT', str_replace('index.php', '', $_SERVER['SCRIPT_FILENAME']));
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
+require(ROOT . 'core/model.php');
+require(ROOT . 'core/controller.php');
 
-<body>
 
-</body>
+$params = explode('/', $_GET['p']);
+$controller = $params[0];
+$action = isset($params[1]) ? $params[1] : 'index';
 
-</html>
+require('controllers/' . $controller . '.php');
+$controller = new $controller();
+if (method_exists($controller, $action)) {
+  $controller->$action();
+} else {
+  echo "erreur 404";
+}
